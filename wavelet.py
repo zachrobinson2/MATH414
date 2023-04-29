@@ -1,8 +1,7 @@
 import pywt
-import matplotlib.pyplot as plt
 import numpy as np
 import sys
-import math
+import cv2
 
 args = sys.argv
 
@@ -10,43 +9,35 @@ if len(args) < 2:
     print("Please enter a filename")
     sys.exit()
 
-dataFileName = args[1]
-decompCount = int(args[2]) if len(args) == 3 else 1
+fileName = args[1]
 
 
-print("Decomposing Data in", dataFileName, decompCount, "time(s).")
+print("Decomposing Data in", fileName)
 
-# TODO: Read in data from file
-sampleCount = 1000
-x = np.linspace(0, 2*np.pi, sampleCount)
-cA = np.sin(x)
-
+# Read in data from file
+image = cv2.imread(fileName)
+image = np.float32(image)
+image /= 255
 
 # Perform transform
-rows = min(decompCount + 1, 3)
-cols = math.ceil((decompCount + 2) / 3)
-fig, axarr = plt.subplots(rows, cols)
-plt.sca(axarr[0, 0])
-plt.plot(x, cA)
-plt.title("Original")
+cA, (cDH, cDV, cDD) = pywt.dwt2(image, "db2")
 
-for i in range(1, decompCount + 1):
-    cA, cD = pywt.dwt(cA, 'haar')
-    cA = list(cA)
-    cD = list(cD)
-    x = np.linspace(0, 2*np.pi, len(cD))
+# Reassemble image
+image *= 255
+image = np.uint8(image)
+cA *= 255
+cA = np.uint8(cA)
+cDH *= 255
+cDH = np.uint8(cDH)
+cDV *= 255
+cDV = np.uint8(cDV)
+cDD *= 255
+cDD = np.uint8(cDD)
 
-    row = i % 3
-    col = i // 3
-    plt.sca(axarr[row, col])
-    plt.plot(x, cD)
-    plt.title("Details " + str(i))
+cv2.imshow('Original', image)
+cv2.imshow("Analysis", cA)
+cv2.imshow("Horizontal Detail", cDH)
+cv2.imshow("Veritical Detail", cDV)
+cv2.imshow("Diagonal Detail", cDD)
+cv2.waitKey(0)
 
-row = (decompCount + 1) % 3
-col = (decompCount + 1) // 3
-plt.sca(axarr[row, col])
-plt.plot(x, cA)
-plt.title("Final Analysis")
-
-plt.subplots_adjust(hspace=1)
-plt.show()
