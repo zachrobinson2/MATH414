@@ -1,4 +1,5 @@
 You need a few libraries installed to make this work:
+install python
 pip install numpy
 pip install opencv-python
 pip install PyWavelets
