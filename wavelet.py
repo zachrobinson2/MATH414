@@ -26,6 +26,22 @@ def wiener_process(t, n):
     W = np.cumsum(dW)
     return W
 
+def discrete_db2(x, y):
+    array = pywt.wavedec(y, "db2", level=depth)
+    cA = array[0]
+    plt.figure()
+    plt.title("Analysis")
+    plt.plot(np.linspace(x[0], x[-1], len(cA)), cA)
+    for i in range(1, len(array)):
+        cD = array[-i]
+        plt.figure()
+        plt.title("Details " + str(i))
+        plt.plot(np.linspace(x[0], x[-1], len(cD)), cD)
+    plt.show()
+
+def continuous_db2(x, y):
+    return
+
 args = sys.argv
 
 if len(args) < 2:
@@ -33,22 +49,55 @@ if len(args) < 2:
     sys.exit()
 
 option = args[1]
-depth = args[2] if (len(args) == 3) else 1
+depth = int(args[2]) if (len(args) == 3) else 1
 
 if option == "1":
     x = np.linspace(0,2,M)
     w = weierstrass(x,500)
-    plt.plot(x, w, 'r-')
-    plt.show()
+    plt.figure()
+    plt.title("Weierstrass")
+    plt.plot(x, w)
+    discrete_db2(x, w)
 elif option == "2":
     x = np.linspace(0,1,M)
     b = blancmange_curve(500)(x)
-    plt.plot(x, b, 'r-')
-    plt.show()
+    plt.figure()
+    plt.title("Blancemange Curve")
+    plt.plot(x, b)
+    discrete_db2(x, b)
 elif option == "3":
     x = np.linspace(0,1,M)
     y = wiener_process(1, M)
-    plt.plot(x, y, 'r-')
-    plt.show()
-
-
+    plt.figure()
+    plt.title("Wierner Process")
+    plt.plot(x, y)
+    discrete_db2(x, y)
+if option == "4":
+    x = np.linspace(0,2,M)
+    w = weierstrass(x,500)
+    plt.figure()
+    plt.title("Weierstrass")
+    plt.plot(x, w)
+    continuous_db2(x, w)
+elif option == "5":
+    x = np.linspace(0,1,M)
+    b = blancmange_curve(500)(x)
+    plt.figure()
+    plt.title("Blancemange Curve")
+    plt.plot(x, b)
+    continuous_db2(x, b)
+elif option == "6":
+    x = np.linspace(0,1,M)
+    y = wiener_process(1, M)
+    plt.figure()
+    plt.title("Wierner Process")
+    plt.plot(x, y)
+    continuous_db2(x, y)
+else:
+    print("Invalid option selected. Please select one of the following options:\n" +
+            "1 - Weierstrass function using Discrete Daubechie 2\n" +
+            "2 - Blancmange Curve using Discrete Daubechie 2\n" +
+            "3 - Wierner Process using Discrete Daubechie 2\n" +
+            "4 - Weierstrass function using Continuous Wavelet Transform\n" +
+            "5 - Blancmange Curve using Continuous Wavelet Transform\n" +
+            "6 - Wierner Process using Continuous Wavelet Transform\n")
