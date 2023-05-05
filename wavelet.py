@@ -39,14 +39,15 @@ def discrete_db2(x, y):
         plt.plot(np.linspace(x[0], x[-1], len(cD)), cD)
     plt.show()
 
-def continuous_db2(x, y):
+def continuous_db2(y):
     global depth
     if depth == 1:
         depth += 1
     coeff, freq = pywt.cwt(y, np.arange(1, depth), "mexh")
     plt.figure()
-    plt.title("Result")
-    plt.plot(np.linspace(x[0], x[-1], len(coeff)), coeff)
+    plt.imshow(coeff, extent=[-1, 1, 1, 31], cmap='PRGn', aspect='auto',
+                vmax=abs(coeff).max(), vmin=-abs(coeff).max())  
+    plt.title("CWT Result")
     plt.show()
 
 args = sys.argv
@@ -85,21 +86,21 @@ if option == "4":
     plt.figure()
     plt.title("Weierstrass")
     plt.plot(x, w)
-    continuous_db2(x, w)
+    continuous_db2(w)
 elif option == "5":
     x = np.linspace(0,1,M)
     b = blancmange_curve(500)(x)
     plt.figure()
     plt.title("Blancemange Curve")
     plt.plot(x, b)
-    continuous_db2(x, b)
+    continuous_db2(b)
 elif option == "6":
     x = np.linspace(0,1,M)
     y = wiener_process(1, M)
     plt.figure()
     plt.title("Wierner Process")
     plt.plot(x, y)
-    continuous_db2(x, y)
+    continuous_db2(y)
 else:
     print("Invalid option selected. Please select one of the following options:\n" +
             "1 - Weierstrass function using Discrete Daubechie 2\n" +
