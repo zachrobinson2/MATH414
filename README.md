@@ -5,7 +5,7 @@ pip install PyWavelets
 pip install matplotlib
 
 You can run the code on an image by doing the following in the command line:
-> python wavelet.py <option> [depth]
+> python wavelet.py <option> [depth] [scale]
 
 option - One of the options below
     1 - Weierstrass function using Discrete Daubechie 2
@@ -15,8 +15,8 @@ option - One of the options below
     5 - Blancmange Curve using Continuous Wavelet Transform
     6 - Wierner Process using Continuous Wavelet Transform
 
-depth - The level to which we want to decompose the data (default value is 1)
-
+depth - The level to which we want to decompose the data for DWT (default value is 1)
+scale - The upper bound of the scales for CWT (default value is 2)
 
 output - a series of graphs including, the original, the decomposed function, and all the details collected
 

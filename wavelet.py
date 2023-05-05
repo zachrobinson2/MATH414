@@ -40,7 +40,14 @@ def discrete_db2(x, y):
     plt.show()
 
 def continuous_db2(x, y):
-    return
+    global depth
+    if depth == 1:
+        depth += 1
+    coeff, freq = pywt.cwt(y, np.arange(1, depth), "mexh")
+    plt.figure()
+    plt.title("Result")
+    plt.plot(np.linspace(x[0], x[-1], len(coeff)), coeff)
+    plt.show()
 
 args = sys.argv
 
